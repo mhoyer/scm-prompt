@@ -31,7 +31,7 @@ scm_aliases["help"]=help
 scm_aliases["record"]=rec
 scm_aliases["forget"]=forget
 
-for scm_specifics ($ZSH/lib/scm-prompt.*.include) source $scm_specifics
+for scm_specifics ($ZSH/lib/scm-prompt/*.zsh) source $scm_specifics
 
 function _scm_debug { [ $SCM_DEBUG ] && echo $* }
 function _scm_init {
