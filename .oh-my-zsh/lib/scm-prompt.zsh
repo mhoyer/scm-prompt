@@ -54,9 +54,9 @@ function _scm_init {
 function _scm_get_scm_type {
   if [ $# -eq 1 ]; then
     # missing second arg -> recursive invokation
-    _scm_get_scm_type $1 "hg"  || \
-    _scm_get_scm_type $1 "git" || \
-    _scm_get_scm_type $1 "svn" && return 0 
+    $0 $1 "hg"  || \
+    $0 $1 "git" || \
+    $0 $1 "svn" && return 0 
     return 1
   fi
 
