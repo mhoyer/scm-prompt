@@ -6,7 +6,7 @@ SCM Prompt is an extension for zsh to provide almost generic support for SCM com
 Shared aliases over all SCM types
 ---
 
-The following mapping shows the aliases and its corresponding SCM commands
+The following mapping shows the aliases and its corresponding SCM commands:
 
 <pre>
 Alias    Git:              Mercurial:          Comment:
@@ -34,6 +34,8 @@ help     git help          hg help             Show help for commands
 rec      git add -p        hg record           Hunk based, interactive add
 forget   git rm --cached   hg forget           Remove a file from repository, but not physically from disk
 </pre>
+
+Hence you just have to remember the aliases in the most left column to run appropriate commands within every SCM scope.
 
 Supported SCMs
 ---
