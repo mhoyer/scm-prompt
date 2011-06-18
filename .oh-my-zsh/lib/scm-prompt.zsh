@@ -1,4 +1,4 @@
-SCM_DEBUG=yes
+# SCM_DEBUG=yes # && unalias set && set -x
 SCM_ROOT= # stores the current path of detected SCM directory
 SCM_TYPE= # stores the repository type (hg|git|svn) of possible detected SCM
 SCM_PROMPT_INFO= # stores current SCM specific prompt suffix
@@ -76,7 +76,7 @@ function scm_detect_root {
   [[ $# -eq 1 && "$1" = "" ]] && return # touched the root (/)
   _DETECT_WD=${1:-$PWD}
   
-  echo -ne "." >&2
+  _scm_debug -ne "."
 
   # check if current $1 is matching existing HG_CURRENT_ROOT
   # [ ! $HG_CURRENT_ROOT ]  && [[ "$CURRENT_WD" =~ ^$HG_CURRENT_ROOT ]] && return
