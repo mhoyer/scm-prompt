@@ -1,8 +1,11 @@
 SCM_DEBUG=yes
 SCM_ROOT= # stores the current path of detected SCM directory
 SCM_TYPE= # stores the repository type (hg|git|svn) of possible detected SCM
-declare -A scm_aliases_creators
+
+[ $SCM_DEBUG ] && unset chpwd_functions precmd_functions scm_aliases_creators
 declare -A scm_aliases
+declare -A scm_aliases_creators
+declare -A scm_prompt_creators
 
 # alias definitions
 scm_aliases["add"]=add
@@ -78,9 +81,9 @@ function scm_update_prompt {
 }
 
 # hook up the functions to ZSH events
-[ $SCM_DEBUG ] && unset chpwd_functions precmd_functions
 declare -a chpwd_functions
 declare -a precmd_functions
 chpwd_functions+='scm_detect_root'
 precmd_functions+='scm_update_prompt'
+
 
