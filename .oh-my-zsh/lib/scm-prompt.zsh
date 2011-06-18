@@ -1,11 +1,19 @@
 SCM_DEBUG=yes
 SCM_ROOT= # stores the current path of detected SCM directory
 SCM_TYPE= # stores the repository type (hg|git|svn) of possible detected SCM
+SCM_PROMPT_INFO= # stores current SCM specific prompt suffix
 
-[ $SCM_DEBUG ] && unset chpwd_functions precmd_functions scm_aliases_creators
+[ $SCM_DEBUG ] && unset chpwd_functions \
+  precmd_functions \
+  scm_aliases_creators \
+  scm_prompt_cache \
+  scm_prompt_cache_updates
+  
 declare -A scm_aliases
 declare -A scm_aliases_creators
 declare -A scm_prompt_creators
+declare -A scm_prompt_cache
+declare -A scm_prompt_cache_updates
 
 # alias definitions
 scm_aliases["add"]=add
@@ -33,11 +41,12 @@ scm_aliases["forget"]=forget
 
 for scm_specifics ($ZSH/lib/scm-prompt/*.zsh) source $scm_specifics
 
-function _scm_debug { [ $SCM_DEBUG ] && echo $* }
+function _scm_debug { [ $SCM_DEBUG ] && echo $* >&2 }
 function _scm_init {
   SCM_ROOT=
   SCM_TYPE=
-  
+  SCM_PROMPT_INFO=
+
   # reset aliases (counterpart of scm_create_aliases[])
   for al ($scm_aliases) unalias $al 2> /dev/nul
 }
@@ -77,7 +86,7 @@ function scm_detect_root {
 }
 
 function scm_update_prompt {
-  echo "TODO"
+  $scm_prompt_creators["$SCM_TYPE"]
 }
 
 # hook up the functions to ZSH events

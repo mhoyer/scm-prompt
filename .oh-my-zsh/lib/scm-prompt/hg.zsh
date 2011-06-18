@@ -23,5 +23,33 @@ function hg_create_aliases {
   alias $scm_aliases["forget"]='hg forget' # Remove a file from repository, but not physically from disk
 }
 
+HG_PROMPT_CHAR="%{$fg[cyan]%}ʜɢ%{$reset_color%}>"
+
+function hg_create_prompt {
+  local HG_ROOT="$SCM_ROOT/.$SCM_TYPE"
+  [[ "$SCM_ROOT" = "" || ! -d "$HG_ROOT" ]] && \
+    SCM_PROMPT_INFO= && return 
+
+  [[ "$scm_prompt_cache[$HG_ROOT]" = "" || \
+     `stat -c %Y $HG_ROOT/dirstate` -gt $scm_prompt_cache_updates[$HG_ROOT] ]] && _update_hg_prompt_info
+  #SCM_PROMPT_INFO=${SCM_PROMPT_INFO:-$(hg_prompt_info)}
+  SCM_PROMPT_INFO="$scm_prompt_cache[$HG_ROOT]"
+}
+
+function _update_hg_prompt_info {
+  _scm_debug " >> Updating HG prompt"
+  scm_prompt_cache[$HG_ROOT]=$(_print_hg_prompt_info)
+  scm_prompt_cache_updates[$HG_ROOT]=$(date +%s)
+}
+
+function _print_hg_prompt_info {
+  hg prompt --angle-brackets "\
+< on $(_xterm_color 166 "<branch>")>\
+< at $(_xterm_color 203 "<tags|, >")>\
+$(_xterm_color 226 "<status|modified|unknown><update>")< \
+patches: <patches|join( → )|pre_applied(%{$fg[yellow]%})|post_applied(%{$reset_color%})|pre_unapplied(%{$fg_bold[black]%})|post_unapplied(%{$reset_color%})>>" 2>/dev/null
+}
+
 scm_aliases_creators["hg"]=hg_create_aliases
+scm_prompt_creators["hg"]=hg_create_prompt
 
